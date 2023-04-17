@@ -55,31 +55,6 @@ class GameFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.i("TAG Hangman", "onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.i("TAG Hangman", "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.i("TAG Hangman", "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.i("TAG Hangman", "onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i("TAG Hangman", "onDestroy")
-    }
-
     private fun gridKeyboard() {
         for ((i, key) in viewModel.keyboard.withIndex()) {
 

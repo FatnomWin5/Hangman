@@ -11,6 +11,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private var counter: Int = 0
     private var countertwo: Int = 0
+    private val endcouter: Int = 5
 
     lateinit var word: String
     private var alphabet: String = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
@@ -30,11 +31,11 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     val image: LiveData<Int>
         get() = _image
 
-    private var _keyboard: MutableList<LiveData<KeyboardItem>> = mutableListOf()
+    private var _keyboard: MutableList<MutableLiveData<KeyboardItem>> = mutableListOf()
     val keyboard: List<LiveData<KeyboardItem>>
         get() = _keyboard
 
-    private var _anotherWord: MutableList<LiveData<WordItem>> = mutableListOf()
+    private var _anotherWord: MutableList<MutableLiveData<WordItem>> = mutableListOf()
     val anotherWord: List<LiveData<WordItem>>
         get() = _anotherWord
 
@@ -71,10 +72,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun isCorrect(index: Int) {
 
         if (_keyboard[index].value?.letter.toString() in partOfWord) {
-            _keyboard[index].value?.checked = KeyboardState.CORRECT
+            _keyboard[index].value = KeyboardItem(KeyboardState.CORRECT, _keyboard[index].value?.letter!!)
             for (i in 1 until _anotherWord.size - 1) {
                 if (_anotherWord[i].value?.letter == _keyboard[index].value?.letter) {
-                    _anotherWord[i].value?.checked = WordState.VISIBLE
+                    _anotherWord[i].value = WordItem(WordState.VISIBLE, _anotherWord[i].value?.letter!!)
                     countertwo += 1
                 }
             }
@@ -82,7 +83,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 _eventGameWon.value = true
             }
         } else {
-            if (counter == 5) {
+            if (counter == endcouter) {
                 _eventGameLose.value = true
             }
             counter += 1
@@ -94,7 +95,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 5 -> R.drawable.image5
                 else -> R.drawable.image6
             }
-            _keyboard[index].value?.checked = KeyboardState.INCORRECT
+            _keyboard[index].value = KeyboardItem(KeyboardState.INCORRECT, _keyboard[index].value?.letter!!)
         }
     }
 
